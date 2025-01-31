@@ -1,10 +1,48 @@
-from flask import Flask
 
-app = Flask(_name_)  
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)  
 
 @app.route('/')
 def index():
-    return "Hola mundo!!"
+    grupo="IDGS803"
+    lista=["Juan", "Pedro", "Maria"]
+    return render_template("index.html", grupo=grupo, lista=lista)
+
+@app.route("/OperaBas")
+def operas():
+    return render_template("OperaBas.html")
+
+@app.route("/resultado", methods=["GET", "POST"])
+def resultado():
+    if request.method == "POST":
+        num1=request.form.get("n1")
+        num2=request.form.get("n2")
+
+    return "La suma de {} y {} es: {} ".format(num1, num2, int(num1)+ int(num2))
+
+
+@app.route('/cal', methods=['GET', 'POST'])
+def calcular():
+
+    resultado = ""
+
+    if request.method == 'POST':
+        n1 = int(request.form.get('n1', 0))
+        n2 = int(request.form.get('n2', 0))
+        resultado = str(n1 + n2)
+
+    return render_template("OperaBas.html", resultado=resultado)
+
+
+@app.route("/ejemplo1")
+def ejemplo1():
+    return render_template("ejemplo1.html")
+
+@app.route("/ejemplo2")
+def ejemplo2():
+    return render_template("ejemplo2.html")
 
 @app.route("/hola")
 def hola():
@@ -26,7 +64,8 @@ def username(user, id):
 def suma(n1, n2):
     return "La suma es {}!!!".format(n1 + n2)
 
-if _name_ == "_main_":
+
+if __name__ == "__main__":
     app.run(debug=True)
 
     
