@@ -69,6 +69,10 @@ def suma(n1, n2):
 def cine():
     return render_template("cine.html")
 
+@app.route("/layout")
+def layout():
+    return render_template("layout.html")
+
 
 
 @app.route('/fin', methods=['GET', 'POST'])
