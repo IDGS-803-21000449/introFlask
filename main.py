@@ -65,6 +65,63 @@ def suma(n1, n2):
     return "La suma es {}!!!".format(n1 + n2)
 
 
+@app.route("/cinepolis")
+def cine():
+    return render_template("cine.html")
+
+
+
+@app.route('/fin', methods=['GET', 'POST'])
+def fin():
+    resultado = ""
+
+    if request.method == 'POST':
+        nombre = request.form.get('nombre', "")
+        compradores = int(request.form.get('compradores', 0))
+        boletos = int(request.form.get('boletos', 0))
+        tarjeta = request.form.get('tarjeta', "No especificado")
+
+        max_boletos = compradores * 7
+
+        if boletos > max_boletos:
+            resultado = f"Compra fallida: Con {compradores} comprador(es) solo puede comprar hasta {max_boletos} boletos. Usted intentó comprar {boletos} boletos."
+        else:
+            if boletos > 6:
+                total = boletos * 12
+                total2 = total * 0.15
+                total3 = total - total2
+
+                if tarjeta == "Si":
+                    total4 = total3 * .10
+                    totalfin = total3 - total4
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${totalfin}"
+                else:
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${total3}"
+
+            elif boletos >= 3 and boletos <= 5:
+                total = boletos * 12
+                total2 = total * 0.10
+                total3 = total - total2
+
+                if tarjeta == "Si":
+                    total4 = total3 * .10
+                    totalfin = total3 - total4
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${totalfin}"
+                else:
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${total3}"
+            else:
+                total = boletos * 12
+
+                if tarjeta == "Si":
+                    total4 = total * .10
+                    totalfin = total - total4
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${totalfin}"
+                else:
+                    resultado = f"Se compraron {boletos} boletos, por {compradores} compradores, a nombre de {nombre} (Tarjeta Cineco: {tarjeta}), con un costo total de ${total}"
+
+
+    return render_template("cine.html", resultado=resultado)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
